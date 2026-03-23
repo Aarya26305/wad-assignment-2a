@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        form {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>User Registration Form</h2>
+
+    <form id="regForm">
+        <input type="text" id="name" placeholder="Enter Name" required>
+        <input type="email" id="email" placeholder="Enter Email" required>
+        <input type="text" id="username" placeholder="Enter Username" required>
+        <input type="text" id="phone" placeholder="Enter Phone" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        document.getElementById("regForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let username = document.getElementById("username").value;
+            let phone = document.getElementById("phone").value;
+
+            let user = {
+                name: name,
+                email: email,
+                username: username,
+                phone: phone
+            };
+
+            // Get existing users from localStorage
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Push new user into array
+            users.push(user);
+
+            // Save updated array back to localStorage
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // AJAX POST request
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://jsonplaceholder.typicode.com/posts", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 201) {
+                    alert("Registration Successful and Data Posted using AJAX!");
+                    window.location.href = "list.html";
+                }
+            };
+
+            xhr.send(JSON.stringify(user));
+        });
+    </script>
+
+</body>
+</html>
